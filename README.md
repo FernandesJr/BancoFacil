@@ -35,7 +35,9 @@ Extrato de todas as movimentações da conta, podendo filtrar mês e ano.
 
 ![3](https://user-images.githubusercontent.com/76791121/104333136-a8176100-54cf-11eb-86ed-2465cf2e56c0.png)
 
-No botão **Salvar** o sistema irá gerar um *.pdf* de acordo com o filtro aplicado. 
+No botão **Salvar** o sistema irá gerar um *.pdf* de acordo com o filtro aplicado.
+
+[Veja um exemplo](https://github.com/FernandesJr/BancoFacil/blob/main/BancoFaciil/BkFacil0601132123.pdf)
 ***
 ## Área administrativa
 O administrador poderá;
