@@ -34,7 +34,7 @@ public class ControllerExtrato {
     private Usuario usuario;
     private String saldoFormatado;
     private Conta conta;
-    private String ano;
+    private String ano = "Todos";
 
     public ControllerExtrato(Extrato view) {
         this.view = view;
@@ -117,7 +117,8 @@ public class ControllerExtrato {
         this.ano = ano;
         String dataIni = "";
         String dataFim = "";
-        boolean todos = false;
+        boolean todosMes = false;
+        boolean todosAno = false;
         switch (mes){
             case "Jan":
                 dataIni = "01-01";
@@ -168,12 +169,20 @@ public class ControllerExtrato {
                 dataFim = "12-31";
                 break;
             default:
-                todos = true;
-                this.mostraExtrato(extratoLista);
-                this.extratoFiltrado = this.extratoLista;
+                todosMes = true;
         }
-        if(!todos){
+        if(!todosMes){
+            // Caso tenha algum mês selecionado
             this.extratoFiltrado = this.contaDaoGlobal.extrato(ano + "-" + dataIni, ano + "-" + dataFim);
+            this.mostraExtrato(this.extratoFiltrado);
+        } else if("Todos".equals(ano)){
+            // Caso o ano estejá com Todos por consequência aqui o mês também estará em Todos. Mostrará lista completa
+            this.mostraExtrato(extratoLista);
+            this.extratoFiltrado = this.extratoLista;
+        }else{
+            // Retorna um Array com a lista filtrada do ano completo
+            this.extratoFiltrado = this.contaDaoGlobal.extrato(ano + "-01-01", ano + "-12-31");
+            // Montando na tela a nova Query
             this.mostraExtrato(this.extratoFiltrado);
         }
     }
