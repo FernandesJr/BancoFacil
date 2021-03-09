@@ -1,5 +1,10 @@
 package Model;
 
+import DAO.Conexao;
+import DAO.UsuarioDAO;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Usuario {
     
     private String nome;
@@ -57,5 +62,13 @@ public class Usuario {
         this.saldo = saldo;
     }
     
+    public String getEmailDB() throws SQLException{
+        
+        //Busca o email no cadastrado DB
+        Conexao conexao = new Conexao();
+        Connection com = conexao.getConnection();
+        UsuarioDAO userDao = new UsuarioDAO(com);
+        return userDao.selectEmail(this.nome);
+    }
     
 }

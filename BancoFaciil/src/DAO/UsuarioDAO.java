@@ -181,5 +181,30 @@ public class UsuarioDAO {
         } catch (SQLException e) {
         }
         return true;
-    } 
+    }
+    
+    public String selectEmail(String nome){
+        
+        //Como o software foi recebendo nossas funcionalidades não estava previsto conter email.
+        //Então esse método busca informações inputadas no DB
+        //Usado no ControllerExtrato
+        String email = null;
+        String sql = "select email from usuarios where nome = ?";
+        
+        try {
+            PreparedStatement statment = this.conexao.prepareStatement(sql);
+            statment.setString(1, nome);
+            statment.executeQuery();
+            
+            ResultSet resultSet = statment.getResultSet();
+            
+            while(resultSet.next()){
+                email = resultSet.getString("email");
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro:" + e);
+        }
+        return email;
+    }
 }

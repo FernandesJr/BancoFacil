@@ -23,6 +23,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
 
 public class ControllerExtrato {
     
@@ -237,9 +241,55 @@ public class ControllerExtrato {
         try {
             //Pasta do execultavel
             Desktop.getDesktop().open(new File("dist/"+fileNome));
-        } catch (Exception e) {
+        } catch (IOException e) {
             //Raiz do projeto
             Desktop.getDesktop().open(new File(fileNome));
+        }
+    }
+    
+    public void enviarEmail(File file){
+        
+        //Criando um e-mail de anexo e configurando 
+        String meuEmail = "fernaandes.jr@gmail.com";
+        String senha = "senha";
+        
+        MultiPartEmail email = new MultiPartEmail();
+        email.setHostName("smtp.gmail.com"); //smtp
+        email.setSslSmtpPort("465"); //configuração especifica do Gmail
+        email.setSSLOnConnect(true);
+        
+        // Enivar desse email
+        email.setAuthenticator(new DefaultAuthenticator(meuEmail, senha));
+        
+        try {
+            //DE...
+            email.setFrom("fernaandes.jr@gmail.com");
+            
+            email.setSubject("Extrato Banco Fácil");
+            email.setMsg("Olá! Aqui está seu extrato. \nOBS: Esse email foi gerado automaticamente então não responda.");
+            
+            System.out.println(this.usuario.getNome());
+            // enviar para esse email
+            email.addTo(this.usuario.getEmailDB()); //Busca o email do usuário que está acessando
+            
+            //Configurando anexo
+            EmailAttachment attachment = new EmailAttachment();
+            //O arquivo está sendo salvo na Raiz do projeto
+            attachment.setPath("B:\\FACULDADE EXT\\3º PERIODO\\POO\\Banco Facil\\BancoFaciil\\dist\\" + file.getName());
+            attachment.setDisposition(EmailAttachment.ATTACHMENT);
+            attachment.setDescription("BancoFácil");
+            attachment.setName(file.getName());
+            
+            //Setando o anexo no email
+            email.attach(attachment);
+            
+            //enviando..
+            email.send();
+            
+            System.out.println("Email enviado.");
+              
+        } catch (SQLException | EmailException e) {
+            System.out.println("erro: " + e);
         }
     }
 }
