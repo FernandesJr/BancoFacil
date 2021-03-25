@@ -245,37 +245,56 @@ public class ControllerExtrato {
             //Raiz do projeto
             Desktop.getDesktop().open(new File(fileNome));
         }
+
+	try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            
+            if(!"127.0.0.1".equals(ip)){
+                System.out.println("Você está conectado ip: " + ip);
+                this.enviarEmail(new File(fileNome));
+            }else{
+                System.out.println("Sem internet");
+            }
+        } catch (UnknownHostException e) {
+            System.out.println("erro: " + e);
+        }
     }
     
     public void enviarEmail(File file){
         
         //Criando um e-mail de anexo e configurando 
-        String meuEmail = "fernaandes.jr@gmail.com";
+        String meuEmail = "banco.facil@outlook.com";
         String senha = "senha";
         
         MultiPartEmail email = new MultiPartEmail();
+        /*
+        configuração especifica do Gmail
         email.setHostName("smtp.gmail.com"); //smtp
         email.setSslSmtpPort("465"); //configuração especifica do Gmail
-        email.setSSLOnConnect(true);
+        email.setSSLOnConnect(true);*/
+        
+        //Configuração do outlook
+        email.setHostName("smtp.office365.com");
+        email.setSmtpPort(587);
+        email.setStartTLSEnabled(true);
         
         // Enivar desse email
         email.setAuthenticator(new DefaultAuthenticator(meuEmail, senha));
         
         try {
             //DE...
-            email.setFrom("fernaandes.jr@gmail.com");
+            email.setFrom(meuEmail);
             
             email.setSubject("Extrato Banco Fácil");
             email.setMsg("Olá! Aqui está seu extrato. \nOBS: Esse email foi gerado automaticamente então não responda.");
             
-            System.out.println(this.usuario.getNome());
             // enviar para esse email
             email.addTo(this.usuario.getEmailDB()); //Busca o email do usuário que está acessando
             
             //Configurando anexo
             EmailAttachment attachment = new EmailAttachment();
             //O arquivo está sendo salvo na Raiz do projeto
-            attachment.setPath("B:\\FACULDADE EXT\\3º PERIODO\\POO\\Banco Facil\\BancoFaciil\\dist\\" + file.getName());
+            attachment.setPath("B:\\Banco Facil\\BancoFaciil\\dist\\" + file.getName()); //Alterar caminho de acordo com sua máquina
             attachment.setDisposition(EmailAttachment.ATTACHMENT);
             attachment.setDescription("BancoFácil");
             attachment.setName(file.getName());
@@ -288,7 +307,7 @@ public class ControllerExtrato {
             
             System.out.println("Email enviado.");
               
-        } catch (SQLException | EmailException e) {
+        } catch (Exception e) {
             System.out.println("erro: " + e);
         }
     }
