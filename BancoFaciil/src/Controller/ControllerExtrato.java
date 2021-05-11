@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -306,9 +307,11 @@ public class ControllerExtrato {
             email.send();
             
             System.out.println("Email enviado.");
+	    JOptionPane.showMessageDialog(null, "Email enviado.");
               
         } catch (Exception e) {
             System.out.println("erro: " + e);
+	    JOptionPane.showMessageDialog(null, "Não conseguimos enviar o Email.");
         }
     }
 }
