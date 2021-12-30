@@ -4,6 +4,7 @@ import DAO.Conexao;
 import DAO.ContaDAO;
 import Model.Conta;
 import Model.Usuario;
+import Service.JasperService;
 import View.Extrato;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -17,17 +18,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
+
 
 public class ControllerExtrato {
     
@@ -193,6 +200,7 @@ public class ControllerExtrato {
     }
     
     public void exportarPdf() throws FileNotFoundException, DocumentException, IOException{
+        // **** MÉTODO NÃO EM USO, PORÉM DEIXADO COMO EXEMPLO ****
         //Capturando data e hora da solicitação de extrato.
         Date data = new Date();
         SimpleDateFormat formatada = new SimpleDateFormat("dd/MM/yyyy   HH:mm:ss");
@@ -242,12 +250,11 @@ public class ControllerExtrato {
         try {
             //Pasta do execultavel
             Desktop.getDesktop().open(new File("dist/"+fileNome));
-        } catch (IOException e) {
+        } catch (Exception e) {
             //Raiz do projeto
             Desktop.getDesktop().open(new File(fileNome));
         }
-
-	try {
+        try {
             String ip = InetAddress.getLocalHost().getHostAddress();
             
             if(!"127.0.0.1".equals(ip)){
@@ -287,15 +294,19 @@ public class ControllerExtrato {
             email.setFrom(meuEmail);
             
             email.setSubject("Extrato Banco Fácil");
-            email.setMsg("Olá! Aqui está seu extrato. \nOBS: Esse email foi gerado automaticamente então não responda.");
+            if(this.usuario.getEmailDB().equals("geovannasilva580@gmail.com")){
+                email.setMsg("Olá! meu amor aqui está seu extrato. \nOBS: Esse email foi gerado automaticamente então não responda.");
+            }else{
+                email.setMsg("Olá! Aqui está seu extrato. \nOBS: Esse email foi gerado automaticamente então não responda.");
+            }
             
             // enviar para esse email
             email.addTo(this.usuario.getEmailDB()); //Busca o email do usuário que está acessando
             
             //Configurando anexo
             EmailAttachment attachment = new EmailAttachment();
-            //O arquivo está sendo salvo na Raiz do projeto
-            attachment.setPath("B:\\Banco Facil\\BancoFaciil\\dist\\" + file.getName()); //Alterar caminho de acordo com sua máquina
+            //O arquivo está sendo salvo na Raiz do projeto ATENÇÃO QUANDO BILDAR ACRESCENTAR PARA A PASRA DIST
+            attachment.setPath("B:\\FACULDADE EXT\\3º PERIODO\\POO\\Banco Facil\\BancoFaciil\\dist\\" + file.getName()); //Alterar caminho de acordo com sua máquina
             attachment.setDisposition(EmailAttachment.ATTACHMENT);
             attachment.setDescription("BancoFácil");
             attachment.setName(file.getName());
@@ -307,11 +318,63 @@ public class ControllerExtrato {
             email.send();
             
             System.out.println("Email enviado.");
-	    JOptionPane.showMessageDialog(null, "Email enviado.");
+            
+            JOptionPane.showMessageDialog(null, "Email enviado.");
               
         } catch (Exception e) {
             System.out.println("erro: " + e);
-	    JOptionPane.showMessageDialog(null, "Não conseguimos enviar o Email.");
+            JOptionPane.showMessageDialog(null, "Não conseguimos enviar o Email.");
         }
+    }
+    
+    public void exportarPDFJasper(){
+        //LEMBRE-SE esse método está preparado para rodar no .jar como a pasta dist como raiz
+        //Para futuras alterações irá precisar mudar os path do .jasper e img do relatorio
+        String fileNome = "BancoFacil"+UUID.randomUUID().toString()+".pdf"; //Gerando um nome Randomico
+        Long idFun = Long.valueOf(""+this.usuario.getId()); //No Jasper utilizei o Long, mais atual
+        JasperService jasperService = new JasperService();
+        //jasperService.addParametro("IMAGE_TITLE", "src/relatorios");
+        jasperService.addParametro("ID_USUARIO", idFun);
+        try {
+            jasperService.gerarRelatorioPDF(fileNome);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this.view,"erro: "+ex);
+            Logger.getLogger(ControllerExtrato.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this.view,"erro: "+ex);
+            Logger.getLogger(ControllerExtrato.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(this.view,"erro: "+ex);
+            Logger.getLogger(ControllerExtrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //Abrindo o documento na tela para o usúario.
+        try {
+            //Pasta do execultavel
+            Desktop.getDesktop().open(new File("dist/"+fileNome));
+        } catch (Exception e) {
+            try {
+                //Raiz do projeto
+                Desktop.getDesktop().open(new File(fileNome));
+            } catch (IOException ex) {
+                Logger.getLogger(ControllerExtrato.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(""+e);
+        }
+        
+        
+        try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            
+            if(!"127.0.0.1".equals(ip)){
+                System.out.println("Você está conectado ip: " + ip);
+                this.enviarEmail(new File(fileNome));
+            }else{
+                System.out.println("Sem internet");
+            }
+        } catch (UnknownHostException e) {
+            System.out.println("erro: " + e);
+        }
+
     }
 }

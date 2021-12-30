@@ -5,11 +5,13 @@ import Controller.ControllerMenuPrincipal;
 import Model.Conta;
 import Model.Usuario;
 import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 
 public class Extrato extends javax.swing.JFrame {
     
@@ -284,12 +286,13 @@ public class Extrato extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboAnoActionPerformed
 
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
-        try {
+        this.controlador.exportarPDFJasper();
+        /*try {
             this.controlador.exportarPdf();
-        } catch (DocumentException | IOException ex) {
+            } catch (DocumentException | IOException ex) {
             System.out.println("Erro: pdf"+ex);
             JOptionPane.showMessageDialog(this,"Feche o antigo relatório.");
-        }
+            }*/
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
     /**

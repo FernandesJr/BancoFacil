@@ -207,4 +207,30 @@ public class UsuarioDAO {
         }
         return email;
     }
+
+    public Usuario recarregarUsuario(String nome) {
+        //Como o software foi recebendo nossas funcionalidades não estava previsto conter email.
+        //Então esse método busca informações inputadas no DB
+        //Usado no ControllerExtrato
+        Usuario user = new Usuario();
+        String sql = "select * from usuarios where nome = ?";
+        
+        try {
+            PreparedStatement statment = this.conexao.prepareStatement(sql);
+            statment.setString(1, nome);
+            statment.executeQuery();
+            
+            ResultSet resultSet = statment.getResultSet();
+            
+            while(resultSet.next()){
+                user.setId(resultSet.getInt("id"));
+                user.setNome(resultSet.getString("nome"));
+                user.setSenha(resultSet.getString("senha"));
+            }
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro:" + e);
+        }
+        return user;
+    }
 }

@@ -37,6 +37,7 @@ public class ControllerLogin {
             ContaDAO contaNoBanco = new ContaDAO(connection, usuario);
             Conta conta = contaNoBanco.trazerContaDoBanco();
             MenuPrincipal menu = new MenuPrincipal();
+            usuario = usuarioDAO.recarregarUsuario(usuario.getNome());
             menu.trazerUsuario(usuario);
             menu.trazerConta(conta);
             menu.setVisible(true);

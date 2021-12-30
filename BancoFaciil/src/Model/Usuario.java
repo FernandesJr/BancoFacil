@@ -30,6 +30,9 @@ public class Usuario {
         this.saldo = saldo;
     }
 
+    public Usuario() {
+    }
+
     public String getNome() {
         return nome;
     }
@@ -63,7 +66,7 @@ public class Usuario {
     }
     
     public String getEmailDB() throws SQLException{
-        
+
         //Busca o email no cadastrado DB
         Conexao conexao = new Conexao();
         Connection com = conexao.getConnection();

@@ -1,6 +1,10 @@
 package View;
 
 import Controller.ControllerLoginPrincipal;
+import java.awt.Image;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 
 public class LoginPrincipal extends javax.swing.JFrame {

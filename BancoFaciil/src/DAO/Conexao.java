@@ -11,7 +11,7 @@ public class Conexao {
     public Connection getConnection() throws SQLException{
         
         try {
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancofacil", "root", "");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/bancofacil", "root", "root");
             System.out.println("conectado");
         } catch (SQLException e){
             System.out.println("Erro:");
