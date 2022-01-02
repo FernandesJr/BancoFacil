@@ -265,6 +265,7 @@ public class ControllerExtrato {
             }
         } catch (UnknownHostException e) {
             System.out.println("erro: " + e);
+            JOptionPane.showMessageDialog(view, e);
         }
     }
     
@@ -324,6 +325,7 @@ public class ControllerExtrato {
         } catch (Exception e) {
             System.out.println("erro: " + e);
             JOptionPane.showMessageDialog(null, "Não conseguimos enviar o Email.");
+            JOptionPane.showMessageDialog(view, e);
         }
     }
     
@@ -357,6 +359,7 @@ public class ControllerExtrato {
                 //Raiz do projeto
                 Desktop.getDesktop().open(new File(fileNome));
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(view, ex);
                 Logger.getLogger(ControllerExtrato.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println(""+e);
