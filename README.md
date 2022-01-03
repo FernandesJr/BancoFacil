@@ -37,12 +37,12 @@ Extrato de todas as movimentações da conta, podendo filtrar mês e ano.
 
 No botão **Salvar** o sistema irá gerar um *.pdf* de acordo com o filtro aplicado.
 
-[Veja um exemplo](https://github.com/FernandesJr/BancoFacil/blob/main/BancoFaciil/BkFacil0601132123.pdf)
+[Veja um exemplo](https://github.com/FernandesJr/BancoFacil/blob/main/BancoFaciil/BancoFacil7fb580d2-3e0c-4029-ab21-04ef526420fa.pdf)
 
 **Email**
 O sistema irá enviar o *.pdf* contendo o extrato para o email do usuário automaticamente.
 
-![emailBancoFacil](https://github.com/FernandesJr/BancoFacil/blob/main/BancoFaciil/BancoFacil7fb580d2-3e0c-4029-ab21-04ef526420fa.pdf)
+![emailBancoFacil](https://user-images.githubusercontent.com/76791121/112500469-2cefe800-8d67-11eb-9a13-9ea2a09d8f32.png)
 
 
 ***
