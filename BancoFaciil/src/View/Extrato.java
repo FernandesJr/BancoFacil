@@ -8,6 +8,7 @@ import com.itextpdf.text.DocumentException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -157,7 +158,7 @@ public class Extrato extends javax.swing.JFrame {
 
         jComboAno.setBackground(new java.awt.Color(0, 153, 153));
         jComboAno.setForeground(new java.awt.Color(255, 255, 255));
-        jComboAno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "2021", "2020" }));
+        jComboAno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "2022", "2021", "2020" }));
         jComboAno.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jComboAno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -286,13 +287,18 @@ public class Extrato extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboAnoActionPerformed
 
     private void jButtonPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPdfActionPerformed
-        this.controlador.exportarPDFJasper();
-        /*try {
+        try {
+            this.controlador.exportarPDFJasper();
+            /*try {
             this.controlador.exportarPdf();
             } catch (DocumentException | IOException ex) {
             System.out.println("Erro: pdf"+ex);
             JOptionPane.showMessageDialog(this,"Feche o antigo relatório.");
             }*/
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, ex);
+            Logger.getLogger(Extrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonPdfActionPerformed
 
     /**

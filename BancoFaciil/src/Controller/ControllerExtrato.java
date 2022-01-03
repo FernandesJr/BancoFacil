@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,8 @@ public class ControllerExtrato {
     private String saldoFormatado;
     private Conta conta;
     private String ano = "Todos";
+    
+    private String mesJasper = "Todos";
 
     public ControllerExtrato(Extrato view) {
         this.view = view;
@@ -135,50 +138,62 @@ public class ControllerExtrato {
             case "Jan":
                 dataIni = "01-01";
                 dataFim = "01-31";
+                this.mesJasper = "01";
                 break;
             case "Fev":
                 dataIni = "02-01";
                 dataFim = "02-31";
+                this.mesJasper = "02";
                 break;
             case "Mar":
                 dataIni = "03-01";
                 dataFim = "03-31";
+                this.mesJasper = "03";
                 break;
             case "Abr":
                 dataIni = "04-01";
                 dataFim = "04-31";
+                this.mesJasper = "04";
                 break;
             case "Mai":
                 dataIni = "05-01";
                 dataFim = "05-31";
+                this.mesJasper = "05";
                 break;
             case "Jun":
                 dataIni = "06-01";
                 dataFim = "06-31";
+                this.mesJasper = "06";
                 break;
             case "Jul":
                 dataIni = "07-01";
                 dataFim = "07-31";
+                this.mesJasper = "07";
                 break;
             case "Ago":
                 dataIni = "08-01";
                 dataFim = "08-31";
+                this.mesJasper = "08";
                 break;
             case "Set":
                 dataIni = "09-01";
                 dataFim = "09-31";
+                this.mesJasper = "09";
                 break;
             case "Out":
                 dataIni = "10-01";
                 dataFim = "10-31";
+                this.mesJasper = "10";
                 break;
             case "Nov":
                 dataIni = "11-01";
                 dataFim = "11-31";
+                this.mesJasper = "11";
                 break;
             case "Dez":
                 dataIni = "12-01";
                 dataFim = "12-31";
+                this.mesJasper = "12";
                 break;
             default:
                 todosMes = true;
@@ -329,12 +344,31 @@ public class ControllerExtrato {
         }
     }
     
-    public void exportarPDFJasper(){
+    public void exportarPDFJasper() throws ParseException{
         //LEMBRE-SE esse método está preparado para rodar no .jar como a pasta dist como raiz
         //Para futuras alterações irá precisar mudar os path do .jasper e img do relatorio
         String fileNome = "BancoFacil"+UUID.randomUUID().toString()+".pdf"; //Gerando um nome Randomico
         Long idFun = Long.valueOf(""+this.usuario.getId()); //No Jasper utilizei o Long, mais atual
         JasperService jasperService = new JasperService();
+        
+        //Verificando o periodo de seleção das transações selecionado pelo o usuário
+        
+        //Seleção de um ano específico
+        SimpleDateFormat formatada = new SimpleDateFormat("yyyy-MM-dd");
+        if(!this.ano.equals("Todos") && this.mes.equals("Todos")){
+            Date dataInicio = formatada.parse(ano + "-01-01");
+            Date dataFinal = formatada.parse(ano + "-12-31");
+            jasperService.addParametro("DATA_INICIO", dataInicio);
+            jasperService.addParametro("DATA_FINAL", dataFinal);
+        } else if(!this.ano.equals("Todos") && !this.mes.equals("Todos")){
+            //Verficando um mês específico
+            Date dataInicio = formatada.parse(ano + "-" + mesJasper + "-01");
+            Date dataFinal = formatada.parse(ano + "-" + mesJasper + "-31");
+            jasperService.addParametro("DATA_INICIO", dataInicio);
+            jasperService.addParametro("DATA_FINAL", dataFinal);
+        } //Se não ele vai null gerando o relatório com todas as transações
+        
+        
         //jasperService.addParametro("IMAGE_TITLE", "src/relatorios");
         jasperService.addParametro("ID_USUARIO", idFun);
         try {
