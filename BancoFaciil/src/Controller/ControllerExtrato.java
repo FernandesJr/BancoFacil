@@ -288,7 +288,7 @@ public class ControllerExtrato {
         
         //Criando um e-mail de anexo e configurando 
         String meuEmail = "banco.facil@outlook.com";
-        String senha = "senha";
+        String senha = "258456zzZ";
         
         MultiPartEmail email = new MultiPartEmail();
         /*
